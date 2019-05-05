@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="text/html;charset=UTF-8"/>
+    <title>注册</title>
+    <link rel="stylesheet" th:href="@{css/bootstrap.css}"/>
+    <style type="text/css">
+body { padding: 20px; }
+.starter-template { width:350px; padding: 0 40px; text-align: center; }
+</style>
+</head>
+<body class="container">
+<hr/>
+<div class="starter-template">
+    <h2>用户注册</h2>
+    <form name="form" th:action="@{/register/user}" onsubmit="return flag();" method="POST"> <!-- 3 -->
+        <div class="form-group">
+            <label for="userName">手机号</label>
+            <input type="text" class="form-control" name="userName" id="userName" value="" placeholder="手机号" />
+
+        </div>
+        <div class="form-group">
+            <label for="email">邮箱</label>
+            <input type="text" class="form-control" name="email" id="email" value="" placeholder="邮箱" />
+
+        </div>
+        <div class="form-group">
+            <label for="password">密码</label>
+            <input type="password" class="form-control" id="password" name="password"  placeholder="密码" />
+        </div>
+        <div class="form-group">
+            <input type="submit" id="login" value="注册" class="btn btn-primary" />
+        </div>
+
+        <script type="text/javascript">
+                 function isPoneAvailable() {
+            var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+            if (!myreg.test(document.getElementById("userName").value)) {
+
+                alert("非法手机号，请重新输入");
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+             function isEmailAvailable() {
+            var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+            if (!reg.test(document.getElementById("email").value)) {
+
+                alert("非法邮箱，请重新输入");
+                return false;
+            } else {
+                return true;
+            }
+        }
+        function flag(){
+
+        if(isPoneAvailable()&&isEmailAvailable())
+         return true;
+         else
+         return false;
+         }
+
+            </script>
+
+    </form>
+
+</div>
+<a th:href="@{/login}" class="btn btn-info">返回登陆界面</a>
+
+</body>
+</html>

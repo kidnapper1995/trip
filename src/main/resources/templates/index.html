@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>主页</title>
+    <link rel="stylesheet" th:href="@{css/bootstrap.css}"/>
+    <style type="text/css">
+body { padding: 40px; }
+</style>
+</head>
+<body class="container">
+<h1>导航页</h1>
+<br/>你好：<a sec:authentication="name"></a>
+<p>
+    <a sec:authorize="hasAuthority('P_USER')" th:href="@{/user/index}"> 个人主页</a>
+    <a sec:authorize="hasAuthority('P_USER')" th:href="@{/user/navigation}"> | 导航服务</a>
+
+    <a sec:authorize="hasAuthority('P_USER')" th:href="@{/user/announcement}"> |实时咨询</a>
+    <a sec:authorize="hasAuthority('P_ADMIN')" th:href="@{/admin/announcement}"> 实时咨询更新</a>
+    <br/><hr/>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" class="btn btn-primary" value="注销"/>
+</form>
+</p>
+</body>
+</html>

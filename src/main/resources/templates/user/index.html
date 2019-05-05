@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Announcement</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+</head>
+<body class="container">
+<br/>
+<h1>个人主页</h1>
+<br/><br/>
+<div class="with:80%">
+    <form class="form-horizontal"   th:action="@{/user/search}"  method="post" onsubmit="return isNull();">
+        <div class="form-group">
+            <label for="searchContent" class="col-sm-2 control-label">请输入搜索内容</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="searchContent"  id="searchContent" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" value="Submit" class="btn btn-info" />
+                &nbsp; &nbsp; &nbsp;
+                <input type="reset" value="Reset" class="btn btn-info" />
+            </div>
+
+        </div>
+    </form>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>创建时间</th>
+            <th>文章名称</th>
+        </tr>
+        </thead>
+        <tbody>
+        <span  th:each="blog : ${blog}">
+                <tr >
+                    <td scope="row" th:text="${blog.getKey()}"></td>
+                    <td th:text="${blog.getValue()}">Otto</td>
+                    <td><a th:href="@{/user/blog/show(date=${blog.getKey()})}">查看</a></td>
+                </tr>
+        </span>
+        </tbody>
+    </table>
+</div>
+<div class="form-group">
+    <div class="col-sm-2 control-label">
+        <a th:href="@{/user/blog/post}" class="btn btn-info">发布新文章</a>
+        <br>
+        <br>
+        <br>
+        <a th:href="@{/index}" class="btn btn-info">返回首页</a>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript">
+    function isNull(){
+     var str = document.getElementById("searchContent").value.replace(/(^\s*)|(\s*$)/g, '');//去除空格;
+    if(str == '' || str == undefined || str == null)
+        {alert("搜索内容不能为空！请重新输入");
+        return false;}
+       else
+       return true;
+       }
+
+</script>
+</html>

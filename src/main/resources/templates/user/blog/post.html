@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>POST</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+    <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.js"></script>
+</head>
+<body class="container">
+<br/>
+<h1>发布攻略</h1>
+<br/><br/>
+<div class="with:80%">
+
+
+
+    <form class="form-horizontal"   th:action="@{/user/blog/addBlog}" onsubmit="return isAvailable()" method="post">
+        <div class="form-group">
+            <label for="title" class="col-sm-2 control-label">标题</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="title"  id="title" placeholder="请输入标题"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="content" class="col-sm-2 control-label">请输入内容</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" name="content"  id="content" placeholder="请输入内容"/></textarea>
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit"  value="Submit" class="btn btn-info" />
+                &nbsp; &nbsp; &nbsp;
+                <a th:href="@{/index}" class="btn btn-info">返回首页</a>
+            </div>
+
+        </div>
+    </form>
+
+
+    <br/>
+    <br/>
+    <div class="form-group">
+        <label for="picture" class="col-sm-2 control-label">请输入要添加的图片的全地址</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="picture"  id="picture" placeholder="请输入地址(每次只能添加一张图片，可多次添加)"/>
+            <br/>
+            <button onclick="addPictures()" class="btn btn-info" >插入图片</button>
+            <br/>
+            <br/>
+            <br/>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        function addPictures() {
+            var pictures=document.getElementById("picture").value;
+
+            document.getElementById("picture").value="";
+
+
+
+            var content=document.getElementById("content").value;
+            var contentAfterAdd=content+"+*"+pictures+"+*";
+            document.getElementById("content").value=contentAfterAdd;
+        }
+
+        function isAvailable(){
+        var flag=document.getElementById("title").value!=""
+        if(!flag)
+        alert("标题不能为空！");
+            return flag;
+        }
+    </script>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Announcement</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+</head>
+<body class="container">
+<br/>
+<h1>宜宾实时资讯</h1>
+<br/><br/>
+<div class="with:80%">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>实时公告信息栏</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr  th:each="announcement : ${announcement}">
+            <th scope="row" th:text="${announcement}">1</th>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="form-group">
+    <div class="col-sm-2 control-label">
+        <a th:href="@{/index}" class="btn btn-info">返回首页</a>
+    </div>
+</div>
+
+</body>
+</html>

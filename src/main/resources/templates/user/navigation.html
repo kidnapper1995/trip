@@ -1,0 +1,61 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+		body, html {width: 100%;height: 100%; margin:0;font-family:"微软雅黑";}
+		#l-map{height:300px;width:100%;}
+		#r-result,#r-result table{width:100%;}
+	</style>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=HY3SWFjyeKSIASPRzXPLqvcHtZrUZOBD"></script>
+    <title>起终点可拖拽的驾车导航</title>
+</head>
+<body>
+<div>
+    <form class="form-horizontal"  id="form"  method="post" onsubmit="return isNull();">
+        <div class="form-group">
+            <label for="start" class="col-sm-2 control-label">请输入搜索内容</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="start" id="start" value="" placeholder="起点" />
+                <input type="text" class="form-control" name="end" id="end" value="" placeholder="终点" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="button" value="搜索" class="btn btn-info" onclick="navigate(form.start,form.end)"/>
+                &nbsp; &nbsp; &nbsp;
+                <input type="reset" value="Reset" class="btn btn-info" />
+            </div>
+
+        </div>
+    </form>
+</div>
+<div id="l-map"></div>
+<div id="r-result"></div>
+
+<div class="form-group">
+    <div class="col-sm-2 control-label">
+        <a th:href="@{/index}" class="btn btn-info">返回首页</a>
+    </div>
+</div>
+
+</body>
+</html>
+<script type="text/javascript">
+	// 百度地图API功能
+	var map = new BMap.Map("l-map");
+	map.centerAndZoom(new BMap.Point(104.62, 28.77), 12);
+
+	 var transit = new BMap.DrivingRoute(map, {
+		renderOptions: {
+			map: map,
+			panel: "r-result",
+			enableDragging : true //起终点可进行拖拽
+		},
+	});
+	map.enableScrollWheelZoom(true);
+
+	function navigate(start,end){
+	transit.search(start.value,end.value);}
+</script>

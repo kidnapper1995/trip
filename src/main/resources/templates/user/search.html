@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Announcement</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+</head>
+<body class="container">
+<br/>
+<h1>查询结果</h1>
+<br/><br/>
+<div class="with:80%">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>创建时间</th>
+            <th>文章名称</th>
+            <th>作者</th>
+        </tr>
+        </thead>
+        <tbody>
+        <span  th:each="result : ${results}">
+                <tr >
+                    <td scope="row" th:text="${result.getDate()}"></td>
+                    <td th:text="${result.getTitle()}">Otto</td>
+                    <td th:text="${result.getUserName()}"></td>
+                    <td><a th:href="@{/user/blog/show(date=${result.getDate()},userName=${result.getUserName()})}">查看</a></td>
+                </tr>
+        </span>
+        </tbody>
+    </table>
+</div>
+<div class="form-group">
+    <div class="col-sm-2 control-label">
+        <a th:href="@{/index}" class="btn btn-info">返回首页</a>
+    </div>
+</div>
+
+</body>
+</html>

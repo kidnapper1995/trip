@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Announcement</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}"></link>
+    <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.js"></script>
+</head>
+<body class="container">
+<br/>
+<h1>景点及美食攻略</h1>
+<br/><br/>
+<div class="with:80%">
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+                <th colspan="2" style=" text-align:center;" rowspan="1" th:text="${title}">景点名称</th>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+        <tr>
+            <th colspan="1" rowspan="1" style=" text-align:center;" th:text="${date}">发布时间</th>
+        </tr>
+        <tr th:if="${userName}==${#authentication.name}"><a th:href="@{/user/blog/delete(date=${date})}">删除此篇文章</a></tr>
+        <span  th:each="content : ${content}">
+                <tr>
+                    <td th:if="${content.startsWith('img')}"> <img th:src="@{'../../'+${content}}" width="50%"></td>
+                    <td th:if="not ${content.startsWith('img')}"><span th:text="${content}"> </span></td>
+                </tr>
+        </span>
+        </tbody>
+    </table>
+</div>
+
+
+<form class="form-horizontal"   th:action="@{/user/blog/addParentComment}"  method="post" onsubmit="return isNull2();">
+    <div class="form-group">
+        <label for="parentComment" class="col-sm-2 control-label">发表评论</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="parentComment"  id="parentComment" />
+            <input type="hidden" class="form-control" name="blogid2"  id="blogid2" th:value="${blogId}"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <input type="submit" value="Submit" class="btn btn-info" />
+            &nbsp; &nbsp; &nbsp;
+            <input type="reset" value="Reset" class="btn btn-info" />
+        </div>
+
+    </div>
+</form>
+
+<div class="bb-comment">
+<div class="comment-list">
+    <div class="list-item"
+         th:each="comment,userStat:${commentList}"
+         data-th-attr="data-commentid=${comment.getKey().getId()}">
+        <div class="con">
+            <div class="user">
+                <span class="name" th:text="${comment.getKey().getUser()}"></span>
+                <span class="comment-author-mark"
+                      th:if="${comment.getKey().getUser()}==${userName}">作者</span>
+            </div>
+            <p class="text" th:text="${comment.getKey().getContent()}"></p>
+            <div class="info">
+                <span class="floor"
+                      th:text="${(userStat.count)+'楼'}"></span>
+                <span class="time"
+                      th:text="${comment.getKey().getDate()}"></span>
+                <span class="reply btn-hover"
+                      sec:authorize="isAuthenticated()" data-th-attr="data-replyid=${comment.getKey().getId()}"><a href="javascript:;" class="reply_btn">回复</a></span>
+                <!--<span th:if="${comment.getKey().getUser()}==${#authentication.name}"><a th:href="@{/user/blog/comment/delete(date=${comment.getKey().getDate()})}">delete</a></span>-->
+
+            <br/><br/><br/>
+            </div>
+
+
+            <div class="reply-box" style="padding-left: 40px;">
+                <div class="reply-item reply-wrap"
+                     th:each="reply:${comment.getValue()}"
+                     data-th-attr="data-commentid=${reply.getId()}">
+                    <div class="reply-con">
+                        <div class="user">
+                            <span  class="name "
+                                   th:text="${reply.getUser()}">言曌</span>
+                            &nbsp; &nbsp;
+                            <span th:if="${reply.getReplyUser() != null}">回复
+                                &nbsp; &nbsp;
+                                <span class="name"
+                                   th:text="${' '+reply.getReplyUser()}"></span>
+
+                             </span>
+                            &nbsp; &nbsp; &nbsp;
+                            <span class="text-con"
+                                  th:text="${': '+reply.getContent()}"></span>
+
+                        </div>
+                        <div class="info">
+                            <span class="time"
+                                  th:text="${reply.getDate()}"></span>
+                            <span class="reply btn-hover"
+                                  data-th-attr="data-replyid=${reply.getId()}">
+                                <a href="javascript:;" class="reply_btn">回复</a>
+                            </span>
+
+
+                        </div>
+                        <br/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="form-group">
+    <div class="col-sm-2 control-label">
+        <a th:href="@{/index}" class="btn btn-info">返回首页</a>
+        <input type="hidden" th:value="${blogId}" id="a"/>
+        <input type="hidden" th:value="${user}" id="b"/>
+    </div>
+</div>
+
+</body>
+<script  type="text/javascript" >
+
+
+        $(document).ready(function(){
+
+        $(function(){
+            //页面加载完毕后开始执行的事件
+            $(".reply_btn").click(function(){
+            $(".form-horizontall").remove();
+            var blogId=$("#a").val();
+            var user=$("#b").val();
+            var pid = $(this).parent().attr("data-replyid");
+                $(this).parent().parent().append("<form class='form-horizontall'   action='/user/blog/comments'  method='post' onsubmit='return isNull();'><input type='hidden' id='bId' name='blogId'/><input type='hidden' id='pid' name='pid'  /><input type='hidden' name='user' id='u' /><div class='form-group'><label for='commentContent' class='col-sm-2 control-label'>请输入评论内容</label><div class='col-sm-10'><textarea type='text' class='form-control' name='commentContent'  id='commentContent' ></textarea></div></div><div class='form-group'><div class='col-sm-offset-2 col-sm-10'><input type='submit' value='Submit' class='btn btn-info' />&nbsp; &nbsp; &nbsp;<input type='reset' value='Reset' class='btn btn-info' /></div></div></form>");
+                document.getElementById('bId').value=blogId;
+                document.getElementById('u').value=user;
+                document.getElementById('pid').value=pid;
+            });
+         });
+         });
+
+function isNull(){
+     var str = document.getElementById("commentContent").value.replace(/(^\s*)|(\s*$)/g, '');//去除空格;
+    if(str == '' || str == undefined || str == null)
+        {alert("搜索内容不能为空！请重新输入");
+        return false;}
+       else
+       return true;
+       }
+
+       function isNull2(){
+     var str = document.getElementById("parentComment").value.replace(/(^\s*)|(\s*$)/g, '');//去除空格;
+    if(str == '' || str == undefined || str == null)
+        {alert("搜索内容不能为空！请重新输入");
+        return false;}
+       else
+       return true;
+       }
+</script>
+
+</html>
